@@ -1,15 +1,38 @@
 import React, { Component } from 'react'
+import { List } from 'immutable'
 import { render } from 'react-dom'
-import styles from './app.css'
+import { compose, createStore } from 'redux'
+import { Provider } from 'react-redux'
+import { GameOfLifeContainer } from './GameOfLife'
+import cellReducer from './cellReducer'
+
+
+const createStoreWithDevTools = compose(
+  window.devToolsExtension ? window.devToolsExtension() : f => f
+)(createStore);
+
+const store = createStoreWithDevTools(cellReducer);
+
+store.dispatch({
+  type: 'SET_STATE',
+  state: {
+    cells: List(),
+    status: 'STOPPED'
+  }
+})
 
 export default class App extends Component {
 
   render () {
-    return <p className={styles.paragraph}>Hello world</p>
+    return (
+      <Provider store={store}>
+        <GameOfLifeContainer />
+      </Provider>
+    );
   }
 
 }
 
 if (process.env.NODE_ENV !== 'test')
-  render(<App />, document.getElementById('main'))
+  render(<App />, document.getElementById('main'));
 
