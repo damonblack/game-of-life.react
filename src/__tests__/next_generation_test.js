@@ -1,11 +1,12 @@
 import nextGeneration, { survivors, births } from 'src/nextGeneration'
+import { List } from 'immutable'
 import { expect } from 'chai'
 
 describe('nextGeneration', () => {
   it('empty fields remain dead', () => {
-    let liveCells = []
+    let liveCells = List();
 
-    expect(nextGeneration(liveCells)).to.be.empty;
+    expect(nextGeneration(liveCells).count()).toEqual
   });
 });
 
