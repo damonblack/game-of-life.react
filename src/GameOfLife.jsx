@@ -14,7 +14,7 @@ const INIT_CELLS = [
 export class GameOfLife extends Component {
   constructor() {
     super(arguments)
-    _.bindAll(this, ['nextTurn', 'startGame', 'stopGame', 'clearAllIntervals'])
+    _.bindAll(this, ['nextTurn', 'startGame', 'stopGame', 'clearAllIntervals', 'canvasClicked'])
   }
 
   componentDidMount() {
@@ -61,6 +61,10 @@ export class GameOfLife extends Component {
     this.intervals.forEach(clearInterval);
   }
 
+  canvasClicked(e) {
+    this.props.toggleCell(e.pageX/8, e.pageY/8);
+  }
+
   render() {
     let universe = this.refs.universe;
     let cellImage = this.refs.cellImage;
@@ -85,7 +89,7 @@ export class GameOfLife extends Component {
         <button onClick={this.startGame}>Play</button>
         <span>Population: {this.props.cells.count()}</span>
         <canvas ref='cellImage' width='5' height='5' />
-        <canvas ref='universe' width='600' height='400' />
+        <canvas ref='universe' onClick={this.canvasClicked} width='600' height='400' />
       </div>
     );
   }

@@ -26,3 +26,8 @@ export function stopGame() {
   }
 }
 
+export function toggleCell(x, y) {
+  console.log("TOGGLE cell");
+  return { type: 'TOGGLE_CELL', x, y };
+}
+

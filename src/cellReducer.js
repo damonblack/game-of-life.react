@@ -21,10 +21,14 @@ export default function(state = Map(), action) {
       console.log('stopping game');
       return setState(state, { status: 'STOPPED' });
 
-    case 'TICK': {
+    case 'TICK':
       console.log('ticking');
       let res = nextGeneration(state.get('cells'));
       return setState(state, { cells: res });
-    }
+
+    case 'TOGGLE_CELL':
+      console.log('toggling cell');
+      return state;
+
   }
 }
