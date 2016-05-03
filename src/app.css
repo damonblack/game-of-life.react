@@ -1,3 +1,19 @@
 .paragraph {
   color: pink;
 }
+
+.controls {
+  text-align: center;
+}
+
+.label {
+  margin-left: 10px;
+}
+
+.active {
+  color: blue;
+}
+
+.inactive {
+  color: grey;
+}

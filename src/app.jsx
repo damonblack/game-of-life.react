@@ -17,6 +17,7 @@ store.dispatch({
   type: 'SET_STATE',
   state: {
     cells: List(),
+    generation: 0,
     status: 'STOPPED'
   }
 })

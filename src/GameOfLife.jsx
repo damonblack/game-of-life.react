@@ -3,13 +3,12 @@ import { render } from 'react-dom'
 import { connect } from 'react-redux'
 import _ from 'lodash'
 import * as actions from './actionCreators'
+import * as styles from './app.css'
 
 const INIT_CELLS = [
-  [24,21],[24,22],[24,23],[22,23],[22,21],[20,20],
-  [21,20],[5,5],[3,3],[4,4],[3,2],[5,4],[2,2],
-  [15,14],[16,14],[16,16],[15,17],[13,35],[11,33],
-  [12,34],[11,32],[13,34],[10,32]
+  [54,36],[55,36],[57,35],[58,36],[59,36],[60,36],[55,34]
 ];
+
 
 export class GameOfLife extends Component {
   constructor() {
@@ -62,7 +61,8 @@ export class GameOfLife extends Component {
   }
 
   canvasClicked(e) {
-    this.props.toggleCell(e.pageX/8, e.pageY/8);
+    let rawPoint = e.target.relMouseCoords(e);
+    this.props.toggleCell(Math.floor(rawPoint.x/8), Math.floor(rawPoint.y/8));
   }
 
   render() {
@@ -72,7 +72,7 @@ export class GameOfLife extends Component {
 
     if (universe && cellImage && cells) {
       let universeContext = universe.getContext('2d');
-      universeContext.clearRect(0,0, 400, 400);
+      universeContext.clearRect(0,0, 1200, 1000);
 
       cells.forEach( (cell) => {
         universeContext.drawImage(
@@ -83,13 +83,21 @@ export class GameOfLife extends Component {
       });
     }
 
+    let running = this.props.status === 'RUNNING';
     return (
       <div>
-        <button onClick={this.stopGame}>Stop</button>
-        <button onClick={this.startGame}>Play</button>
-        <span>Population: {this.props.cells.count()}</span>
-        <canvas ref='cellImage' width='5' height='5' />
-        <canvas ref='universe' onClick={this.canvasClicked} width='600' height='400' />
+        <div className={styles.controls}>
+          <button onClick={this.stopGame}
+                  className={ running ? styles.active : styles.inactive }
+                  disabled={ !running }>Stop</button>
+          <button onClick={this.startGame}
+                  className={ running ? styles.inactive : styles.active }
+                  disabled={ running }>Play</button>
+          <span className={styles.label}>Population: {this.props.cells.count()}</span>
+          <span className={styles.label}>Generation: {this.props.generation}</span>
+          <canvas ref='cellImage' width='5' height='5' style={ {display: "none"} } />
+        </div>
+        <canvas ref='universe' onClick={this.canvasClicked} width='1200' height='1000' />
       </div>
     );
   }
@@ -98,8 +106,30 @@ export class GameOfLife extends Component {
 function loadCells(state) {
   return {
     cells: state.get('cells'),
+    generation: state.get('generation'),
     status: state.get('status')
   }
 }
 
+function relMouseCoords(event){
+  var totalOffsetX = 0;
+  var totalOffsetY = 0;
+  var canvasX = 0;
+  var canvasY = 0;
+  var currentElement = this;
+
+  do{
+    totalOffsetX += currentElement.offsetLeft - currentElement.scrollLeft;
+    totalOffsetY += currentElement.offsetTop - currentElement.scrollTop;
+  }
+  while(currentElement = currentElement.offsetParent)
+
+  canvasX = event.pageX - totalOffsetX;
+  canvasY = event.pageY - totalOffsetY;
+
+  return {x:canvasX, y:canvasY}
+}
+HTMLCanvasElement.prototype.relMouseCoords = relMouseCoords;
+
 export const GameOfLifeContainer = connect(loadCells, actions)(GameOfLife);
+
