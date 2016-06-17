@@ -6,34 +6,32 @@ import { Provider } from 'react-redux'
 import { GameOfLifeContainer } from './GameOfLife'
 import cellReducer from './cellReducer'
 
-
 const createStoreWithDevTools = compose(
   window.devToolsExtension ? window.devToolsExtension() : f => f
 )(createStore);
 
-const store = createStoreWithDevTools(cellReducer);
+const store = createStoreWithDevTools(cellReducer)
 
 store.dispatch({
-  type: 'SET_STATE',
-  state: {
-    cells: List(),
-    generation: 0,
-    status: 'STOPPED'
+  type : 'SET_STATE',
+  state : {
+    cells : List(),
+    generation : 0,
+    status : 'STOPPED'
   }
-})
+});
 
 export default class App extends Component {
 
   render () {
     return (
       <Provider store={store}>
-        <GameOfLifeContainer />
+        <GameOfLifeContainer gameWidth={window.innerWidth} gameHeight={window.innerHeight - 50} />
       </Provider>
-    );
+    )
   }
-
 }
 
 if (process.env.NODE_ENV !== 'test')
-  render(<App />, document.getElementById('main'));
+  render(<App />, document.getElementById('main'))
 

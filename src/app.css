@@ -1,13 +1,22 @@
-.paragraph {
-  color: pink;
-}
-
 .controls {
-  text-align: center;
+  color: white;
+<<<<<<< HEAD
+  padding: 10px;
+=======
+>>>>>>> b4ff434... General clean up and styling.
+  background-color: black;
 }
 
 .label {
-  margin-left: 10px;
+  width: 120px;
+  float: left;
+  margin-left: 30px;
+}
+
+.hint {
+  width: 300px;
+  float: left;
+  margin-left: 40px;
 }
 
 .active {
@@ -15,5 +24,19 @@
 }
 
 .inactive {
-  color: grey;
+  color: black;
 }
+
+canvas {
+  background-color: #333333;
+}
+
+.buttons {
+  margin-left: 200px;
+  display: inline;
+}
+
+button {
+  margin-left: 10px;
+}
+

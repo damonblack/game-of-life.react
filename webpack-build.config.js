@@ -11,10 +11,10 @@ var PATHS = {
 }
 
 var config = {
+  entry: [PATHS.SOURCE + '/app.jsx'],
   output : {
     path : PATHS.OUTPUT,
-    publicPath : '/static/',
-    filename : 'game-bundle.js'
+    filename : 'game-of-life.js'
   },
   module : {
     loaders : [
@@ -43,7 +43,7 @@ var config = {
     }
   },
   plugins : [
-    new ExtractTextPlugin('style.css', { allChunks : true }),
+    new ExtractTextPlugin('game-of-life.css', { allChunks : true }),
     new webpack.DefinePlugin({
       'process.env.NODE_ENV' : JSON.stringify(process.env.NODE_ENV)
     })
@@ -52,26 +52,8 @@ var config = {
     require('postcss-normalize'),
     require('autoprefixer')
   ]
-}
+};
 
-var buildConfig = assign({}, config, {
-  entry : [PATHS.SOURCE + '/app.jsx']
-})
-
-var devConfig = assign({}, buildConfig, {
-  entry : [
-    'webpack-hot-middleware/client'
-  ].concat(buildConfig.entry),
-  plugins : [
-    new webpack.HotModuleReplacementPlugin(),
-    new webpack.NoErrorsPlugin()
-  ].concat(buildConfig.plugins)
-})
-
-module.exports = {
-  buildConfig : buildConfig,
-  devConfig : devConfig
-}
+module.exports = config;
 
 /* eslint-enable no-var,object-shorthand,prefer-template */
-

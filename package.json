@@ -1,7 +1,7 @@
 {
-  "name": "webapp-boilerplate",
+  "name": "game-of-life.reacgt",
   "version": "0.0.6",
-  "description": "A boilerplate for webpack, testing, linters, React.",
+  "description": "A react-redux-immutable.js implementation of Game of Life",
   "main": "webpack.config.js",
   "dependencies": {
     "immutable": "^3.8.1",
@@ -56,6 +56,7 @@
     "ci": "npm run lint && npm run test:travisci",
     "lint": "eslint --ext .jsx,.js dev-server src && jscs -x dev-server src",
     "start": "env NODE_ENV=development node dev-server",
+    "build_prod": "env NODE_ENV=production webpack --config webpack-build.config.js --verbose ",
     "test": "env NODE_ENV=test karma start karma.conf.js",
     "test:travisci": "env PHANTOMJS_BIN=/usr/local/bin/phantomjs npm test",
     "watch": "npm run test -- --single-run=false"

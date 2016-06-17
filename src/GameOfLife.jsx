@@ -5,50 +5,60 @@ import _ from 'lodash'
 import * as actions from './actionCreators'
 import * as styles from './app.css'
 
-const INIT_CELLS = [
-  [54,36],[55,36],[57,35],[58,36],[59,36],[60,36],[55,34]
-];
-
-
 export class GameOfLife extends Component {
-  constructor() {
-    super(arguments)
-    _.bindAll(this, ['nextTurn', 'startGame', 'stopGame', 'clearAllIntervals', 'canvasClicked'])
+  constructor () {
+    super(arguments);
+    _.bindAll(this, ['nextTurn', 'startGame', 'stopGame', 'clearAllIntervals', 'canvasClicked']);
   }
 
-  componentDidMount() {
-    let cellContext = this.refs.cellImage.getContext('2d');
-    cellContext.fillStyle = "black";
-    cellContext.fillRect(0,0,5,5);
-
-    this.props.setState({ cells: INIT_CELLS });
-  }
-
-  componentWillMount() {
+  /* eslint no-unused-vars: 0 */
+  componentWillMount () {
     this.intervals = []
   }
 
+  /* eslint no-unused-vars: 0 */
+  componentDidMount () {
+    const cellContext = this.refs.cellImage.getContext('2d');
+    cellContext.fillStyle = 'white';
+    cellContext.fillRect(0, 0, 6, 6);
+
+    const ORIGX = Math.floor(this.props.gameWidth/16)- 15;
+    const ORIGY = Math.floor(this.props.gameHeight/16) - 8;
+
+    const INIT_CELLS = [
+      [ORIGX, ORIGY+2],
+      [ORIGX+1, ORIGY+2],
+      [ORIGX+3, ORIGY+1],
+      [ORIGX+4, ORIGY+2],
+      [ORIGX+5, ORIGY+2],
+      [ORIGX+6, ORIGY+2],
+      [ORIGX+1, ORIGY]
+    ]
+
+    this.props.setState({ cells : INIT_CELLS })
+  }
+
+  componentWillUnmount () {
+    this.clearAllIntervals()
+  }
+
   setInterval () {
-    this.intervals.push(setInterval.apply(null, arguments));
+    this.intervals.push(setInterval.apply(null, arguments))
   }
 
-  componentWillUnmount() {
-    this.clearAllIntervals();
-  }
-
-  stopGame() {
+  stopGame () {
     this.clearAllIntervals();
     this.props.stopGame();
   }
 
-  startGame() {
+  startGame () {
     if (this.props.status !== 'RUNNING') {
       this.props.startGame();
       this.setInterval(this.nextTurn, 300);
     }
   }
 
-  nextTurn() {
+  nextTurn () {
     if (this.props.status === 'RUNNING') {
       this.props.tick();
     } else {
@@ -56,78 +66,88 @@ export class GameOfLife extends Component {
     }
   }
 
-  clearAllIntervals() {
+  clearAllIntervals () {
     this.intervals.forEach(clearInterval);
   }
 
-  canvasClicked(e) {
-    let rawPoint = e.target.relMouseCoords(e);
-    this.props.toggleCell(Math.floor(rawPoint.x/8), Math.floor(rawPoint.y/8));
+  canvasClicked (e) {
+    const rawPoint = e.target.relMouseCoords(e);
+    this.props.toggleCell(Math.floor(rawPoint.x / 8), Math.floor(rawPoint.y / 8));
   }
 
-  render() {
-    let universe = this.refs.universe;
-    let cellImage = this.refs.cellImage;
-    let cells = this.props.cells;
+  /* eslint no-unused-vars: 0 */
+  render () {
+    const universe = this.refs.universe;
+    const cellImage = this.refs.cellImage;
+    const cells = this.props.cells;
 
     if (universe && cellImage && cells) {
-      let universeContext = universe.getContext('2d');
-      universeContext.clearRect(0,0, 1200, 1000);
+      const universeContext = universe.getContext('2d');
+      universeContext.clearRect(0, 0, this.props.gameWidth, this.props.gameHeight);
 
-      cells.forEach( (cell) => {
+      cells.forEach(cell => {
         universeContext.drawImage(
           cellImage,
           cell.get(0) * 8,
           cell.get(1) * 8
         );
-      });
+      })
     }
 
-    let running = this.props.status === 'RUNNING';
+    const running = this.props.status === 'RUNNING';
+
     return (
       <div>
         <div className={styles.controls}>
-          <button onClick={this.stopGame}
-                  className={ running ? styles.active : styles.inactive }
-                  disabled={ !running }>Stop</button>
-          <button onClick={this.startGame}
-                  className={ running ? styles.inactive : styles.active }
-                  disabled={ running }>Play</button>
-          <span className={styles.label}>Population: {this.props.cells.count()}</span>
-          <span className={styles.label}>Generation: {this.props.generation}</span>
-          <canvas ref='cellImage' width='5' height='5' style={ {display: "none"} } />
+          <div className={styles.label}>
+            <span>Population: {this.props.cells.count()}</span>
+          </div>
+          <div className={styles.label}>
+            <span>Generation: {this.props.generation}</span>
+          </div>
+          <div className={styles.hint}>
+            <span>Click map to add/remove cells</span>
+          </div>
+          <div className={styles.buttons}>
+            <button onClick={this.stopGame}
+                    className={running ? styles.active : styles.inactive}
+                    disabled={!running}>Stop</button>
+            <button onClick={this.startGame}
+                    className={running ? styles.inactive : styles.active}
+                    disabled={running}>Play</button>
+          </div>
+          <canvas ref='cellImage' width='6' height='6' style={{ display : 'none' }} />
         </div>
-        <canvas ref='universe' onClick={this.canvasClicked} width='1200' height='1000' />
+        <canvas ref='universe' onClick={this.canvasClicked} width={this.props.gameWidth} height={this.props.gameHeight} />
       </div>
-    );
+    )
   }
 }
 
-function loadCells(state) {
+function loadCells (state) {
   return {
-    cells: state.get('cells'),
-    generation: state.get('generation'),
-    status: state.get('status')
+    cells : state.get('cells'),
+    generation : state.get('generation'),
+    status : state.get('status')
   }
 }
 
-function relMouseCoords(event){
-  var totalOffsetX = 0;
-  var totalOffsetY = 0;
-  var canvasX = 0;
-  var canvasY = 0;
-  var currentElement = this;
+function relMouseCoords (event) {
+  let totalOffsetX = 0;
+  let totalOffsetY = 0;
+  let currentElement = event.target;
 
-  do{
+  do {
     totalOffsetX += currentElement.offsetLeft - currentElement.scrollLeft;
     totalOffsetY += currentElement.offsetTop - currentElement.scrollTop;
+    currentElement = currentElement.offsetParent;
   }
-  while(currentElement = currentElement.offsetParent)
+  while (currentElement);
 
-  canvasX = event.pageX - totalOffsetX;
-  canvasY = event.pageY - totalOffsetY;
+  const canvasX = event.pageX - totalOffsetX;
+  const canvasY = event.pageY - totalOffsetY;
 
-  return {x:canvasX, y:canvasY}
+  return { x : canvasX, y : canvasY };
 }
 HTMLCanvasElement.prototype.relMouseCoords = relMouseCoords;
 

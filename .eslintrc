@@ -1,4 +1,5 @@
 {
+    "extends": "eslint:recommended",
     "rules": {
         "indent": [
             2, 2
@@ -11,11 +12,6 @@
             2,
             "unix"
         ],
-        "semi": [
-            2,
-            "never"
-        ],
-        "func-style": [2, "expression"],
         "new-parens": 2,
         "no-array-constructor": 2,
         "no-mixed-spaces-and-tabs": 2,
@@ -27,8 +23,6 @@
         "object-shorthand": 2,
         "prefer-arrow-callback": 2,
         "prefer-const": 2,
-        "prefer-spread": 2,
-        "prefer-reflect": 2,
         "no-console": 2,
         "no-constant-condition": 2,
         "no-debugger": 2,
@@ -92,9 +86,7 @@
         "arrow-spacing": 2,
         "object-curly-spacing": [2, "always"],
         "react/jsx-boolean-value": 2,
-        "react/jsx-closing-bracket-location": 2,
         "react/jsx-curly-spacing": 1,
-        "react/jsx-indent-props": [2, 2],
         "react/jsx-no-duplicate-props": 1,
         "react/jsx-no-undef": 2,
         "jsx-quotes": [2, "prefer-single"],
@@ -106,7 +98,7 @@
         "react/no-did-update-set-state": 1,
         "react/no-multi-comp": 1,
         "react/no-unknown-property": 1,
-        "react/prop-types": 1,
+//        "react/prop-types": 1,
         "react/react-in-jsx-scope": 2,
         "react/require-extension": 1,
         "react/self-closing-comp": 1,
@@ -124,7 +116,6 @@
         "expect": true,
         "sinon": true
     },
-    "extends": "eslint:recommended",
     "parserOptions": {
       "sourceType": "module",
       "ecmaFeatures": {
